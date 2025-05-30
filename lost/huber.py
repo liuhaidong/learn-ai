@@ -1,34 +1,48 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# 数据
-x = np.array([50, 60, 70, 80, 90])
-y = np.array([100, 120, 140, 160, 1000])  # 最后一个是异常点
+# 设置真实值y=0，预测值在-3到3之间变化
+y = 0
+y_pred = np.linspace(-3, 3, 1000)
+delta = 1  # Huber损失的delta参数
 
-# 假设我们尝试用 y = a * x + b 回归
-# 简单线性拟合（最小二乘）
-from sklearn.linear_model import LinearRegression, HuberRegressor
+# 计算Huber损失
+def huber_loss(y_true, y_pred, delta):
+    error = y_pred - y_true
+    is_small_error = np.abs(error) <= delta
+    squared_loss = 0.5 * error**2
+    linear_loss = delta * (np.abs(error) - 0.5 * delta)
+    return np.where(is_small_error, squared_loss, linear_loss)
 
-x_reshape = x.reshape(-1, 1)
+# 计算Huber损失的导数
+def huber_derivative(y_true, y_pred, delta):
+    error = y_pred - y_true
+    is_small_error = np.abs(error) <= delta
+    return np.where(is_small_error, error, delta * np.sign(error))
 
-# 用普通回归（等于用MSE）
-lr = LinearRegression().fit(x_reshape, y)
+# 计算损失和导数
+huber = huber_loss(y, y_pred, delta)
+huber_deriv = huber_derivative(y, y_pred, delta)
 
-# 用鲁棒回归（Huber）
-huber = HuberRegressor().fit(x_reshape, y)
+# 绘图
+plt.figure(figsize=(12, 5))
 
-# 预测线
-x_line = np.linspace(50, 90, 100).reshape(-1, 1)
-y_lr = lr.predict(x_line)
-y_huber = huber.predict(x_line)
-
-# 画图
-plt.scatter(x, y, color='black', label='数据点（含异常）')
-plt.plot(x_line, y_lr, color='red', label='普通回归（MSE）')
-plt.plot(x_line, y_huber, color='green', label='Huber回归')
-plt.xlabel('面积（㎡）')
-plt.ylabel('价格（万元）')
-plt.title('异常点对回归线的影响')
-plt.legend()
+plt.subplot(1, 2, 1)
+plt.plot(y_pred, huber)
+plt.axvline(x=y, color='r', linestyle='--')
+plt.title(f'Huber Loss (δ={delta})')
+plt.xlabel('Prediction')
+plt.ylabel('Loss')
 plt.grid(True)
+
+plt.subplot(1, 2, 2)
+plt.plot(y_pred, huber_deriv)
+plt.axvline(x=y, color='r', linestyle='--')
+plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+plt.title(f'Huber Derivative (δ={delta})')
+plt.xlabel('Prediction')
+plt.ylabel('Gradient')
+plt.grid(True)
+
+plt.tight_layout()
 plt.show()

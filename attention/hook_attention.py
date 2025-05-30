@@ -9,12 +9,12 @@ plt.rcParams['font.sans-serif'] = ['WenQuanYi Micro Hei']  # 使用文泉驿微�
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 
 # 加载模型和分词器
-model_name = "/home/liuhaidong/workspace/aha_agent/learn-ai/models/Qwen3-0.6B"
+model_name = "/home/liuhaidong/workspace/learn-ai/models/Qwen3-0.6B"
 tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, output_attentions=True)
 
 inputs = tokenizer("A major power outage affects most of the Iberian Peninsula.", return_tensors="pt")
-outputs = model(**inputs)
+outputs = model(**inputs) # , output_hidden_states=True 输出隐藏层,机器内存小会死机
 attentions = outputs.attentions
 
 def plot_attention(attention, layer=0, head=0):
@@ -37,6 +37,8 @@ def plot_attention(attention, layer=0, head=0):
 
 # 示例：绘制第0层第0头的注意力
 plot_attention(attentions, layer=0, head=0)
+plot_attention(attentions, layer=2, head=0)
+plot_attention(attentions, layer=6, head=0)
 
 # 计算所有头在某层的平均注意力
 mean_attn = torch.mean(attentions[0], dim=1)[0]
