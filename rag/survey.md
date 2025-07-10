@@ -60,6 +60,10 @@ complex reasoning tasks. MCTS-RAG dynamically integrates
 retrieval and reasoning through an iterative decision-making
 process.
 
+RAGate
+[Wang et al., 2024a] uses the conversation context and model
+confidence to route only those dialogue turns that truly require external knowledge to a RAG process. This ensures the system can bypass retrieval for straightforward prompts while invoking it for knowledge-intensive queries, exemplifying conditional RAG in dialogue.
+
 ### RETRIEVAL
 
 #### Retrieval Source
@@ -82,12 +86,7 @@ including Token, Phrase, Sentence, Proposition, Chunks, Document.
 
 Formulating a precise and clear question
 
-* Query Expansion: Expanding a single query into multiple queries enriches the content of the query, providing
-further context to address any lack of specific nuances
-
-* Query Expansion: Expanding a single query into multiple queries enriches the content of the query, providing
-further context to address any lack of specific nuances.The implementation of the query rewrite method in the Taobao, known
-as BEQUE [9] has notably enhanced recall effectiveness for
+* Query Expansion: Expanding a single query into multiple queries enriches the content of the query, providingfurther context to address any lack of specific nuances.The implementation of the query rewrite method in the Taobao, known as BEQUE [9] has notably enhanced recall effectiveness for
 long-tail queries, resulting in a rise in GMV.
 
 * Query Routing: Based on varying queries, routing to distinct RAG pipeline
@@ -113,9 +112,25 @@ generate more accurate and contextually relevant outputs
 
 --
 
-## Agentic Deep Research
+## Agentic
 
 ### TTS
 
 **Test-Time Scaling**:  has emerged as a potent paradigm for boosting the reasoning and
 agentic capabilities of LLMs (Snell et al., 2024). It assigns additional computation during inference,enabling deeper problem-solving (Zou et al., 2025a; Gu et al., 2025)
+
+#### Agentic RAG
+
+* Search-R1
+It extends RL-based reasoning frameworks (like DeepSeek-R1) by integrating search engine interaction directly into the learning loop. In the Search-R1 framework, the search engine is modeled as part of the RL environment. The LLM agent learns a policy to generate a sequence of tokens that includes both internal reasoning steps (often enclosed in <think> tags) and explicit triggers for search actions. These triggers are special tokens, <search> and </search>, which encapsulate the generated search query.
+
+* ReZero
+aims to teach the agent the value of “trying one more time.” The framework operates within a standard RL setup (using GRPO is mentioned) where the LLM interacts with a search environment.
+
+* DeepRetrieval
+employs RL algorithms like Proximal Policy Optimization (PPO) [Schulman et al., 2017] to train this query generation process.
+DeepRetrieval uses the performance of the generated query in the actual retrieval system as the
+reward
+
+* DeepResearcher
+ The framework employs RL (specifically GRPO with an F1 score-based reward for answer accuracy) to train agents that interact with live web search APIs and browse actual webpages. DeepResearcher utilizes a specialized multi-agent architecture to handle the complexities of web interaction.
