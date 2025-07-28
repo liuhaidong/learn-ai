@@ -1,13 +1,11 @@
-1. Develop and optimize large-scale model inference frameworks at the company level.
-2. Build industry-leading high-performance LLM inference engines by leveraging the latest hardware capabilities (e.g., GPU CUDA optimizations) and adapting to real-world production scenarios.
-3. Research and integrate cutting-edge technologies in machine learning systems.
-4. Work closely with algorithm scientists(if algorithm scientist on-board) to achieve joint optimization of algorithms and system performance.
-#####
-根据您提供的职位描述，该产品应是一个面向大规模语言模型（LLM）的高性能推理系统。以下是详细的功能和架构分析：
+# 高性能推理系统
+
+## 架构
 
 ---
 
 ### **一、核心功能**
+
 1. **分布式推理加速**
    - 支持千亿参数模型的低延迟推理（如GPT-3/4、LLaMA等）
    - 动态批处理（Dynamic Batching）和连续批处理（Continuous Batching）
@@ -30,7 +28,9 @@
 ---
 
 ### **二、系统架构**
+
 #### **1. 分层架构**
+
 ```mermaid
 graph TD
     A[Client] --> B[API Gateway]
@@ -44,6 +44,7 @@ graph TD
 ```
 
 #### **2. 关键组件**
+
 - **调度层（Orchestrator）**
   - 基于DAG的任务调度引擎
   - 支持抢占式推理（Preemptive Inference）
@@ -55,6 +56,7 @@ graph TD
   - A/B测试流量分流
 
 #### **3. 数据流**
+
 ```python
 # 伪代码示例
 def inference_workflow(request):
@@ -68,6 +70,7 @@ def inference_workflow(request):
 ---
 
 ### **三、核心技术指标**
+
 | 指标                | 目标值                  | 实现手段                     |
 |---------------------|-------------------------|------------------------------|
 | 吞吐量              | >10k tokens/sec/GPU     | 连续批处理+FP8量化           |
@@ -78,6 +81,7 @@ def inference_workflow(request):
 ---
 
 ### **四、典型技术栈**
+
 - **计算加速**：CUDA Graphs, Triton Inference Server
 - **网络**：gRPC with RDMA支持
 - **部署**：Kubernetes + Kubeflow
@@ -86,6 +90,7 @@ def inference_workflow(request):
 ---
 
 ### **五、行业差异化设计**
+
 1. **硬件适配层抽象**
    - 支持多厂商硬件（NVIDIA/AMD/国产AI芯片）
    - 自动选择最优后端（如CUDA vs ROCm）
@@ -103,6 +108,7 @@ def inference_workflow(request):
 ---
 
 ### **一、核心挑战与解决思路**
+
 | 挑战                | 关键技术方案                                                                 |
 |---------------------|----------------------------------------------------------------------------|
 | 显存墙              | 模型切分（Tensor/Pipeline并行）+ 显存优化（PageAttention/Zero Offload）    |
@@ -115,6 +121,7 @@ def inference_workflow(request):
 ### **二、关键技术实现**
 
 #### **1. 模型并行化设计**
+
 ```mermaid
 graph LR
     A[输入序列] --> B(Tensor并行: 横向切分注意力头)
@@ -128,6 +135,7 @@ graph LR
 - **通信优化**：使用NCCL的`ALL2ALL`通信原语，配合CUDA Graph固化通信模式
 
 #### **2. 显存优化技术**
+
 - **PageAttention**（vLLM核心）：
   ```python
   # 伪代码示例
@@ -144,7 +152,9 @@ graph LR
 - **Zero-Inference**：继承Zero显存技术，动态加载卸载模型参数
 
 #### **3. 计算加速实践**
+
 - **算子融合**：
+
   ```cuda
   // 示例：融合LayerNorm+GeLU的CUDA内核
   __global__ void fused_ln_gelu(float* input, float* output) {
@@ -152,11 +162,13 @@ graph LR
       ...
   }
   ```
+
 - **量化部署**：
   - 训练后量化（PTQ）：使用TensorRT的QAT工具链
   - 训练感知量化（AWQ）：保护关键权重通道
 
 #### **4. 动态批处理系统**
+
 ```mermaid
 sequenceDiagram
     participant Client
@@ -176,6 +188,7 @@ sequenceDiagram
 ---
 
 ### **三、典型性能优化案例**
+
 **场景**：175B参数模型在A100集群上的推理
 
 | 优化阶段           | 延迟(ms) | 显存占用(GB) |
@@ -195,6 +208,7 @@ sequenceDiagram
    - **网络**：400Gbps RDMA（避免通信成为瓶颈）
 
 2. **性能分析工具链**：
+
    ```bash
    # NSight工具套件示例
    nsys profile --capture-range=cudaProfilerApi -o report.qdrep ./inference_engine
@@ -207,6 +221,7 @@ sequenceDiagram
 ---
 
 ### **五、前沿方向探索**
+
 1. **非Transformer架构**：Mamba等状态空间模型的结构优化
 2. **存算一体**：利用HBM3特性设计新型缓存策略
 3. **编译期优化**：使用MLIR统一计算图表示

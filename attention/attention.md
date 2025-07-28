@@ -3,7 +3,9 @@
 ---
 
 ## **1. MHA在不同模型中的使用与优化**
+
 ### **(1) GPT系列（OpenAI）**
+
 - **GPT-1/2/3**：  
   - 使用标准MHA，但随着模型增大，计算成本剧增。
   - **GPT-3** 可能引入**块稀疏注意力**（Block Sparse Attention）来降低长序列计算开销。
@@ -11,22 +13,26 @@
   - 可能结合 **FlashAttention** 加速训练，并采用 **混合专家（MoE）** 减少激活参数。
 
 ### **(2) LLaMA（Meta）**
+
 - **LLaMA-1**：  
   - 标准MHA + **RoPE（旋转位置编码）** + **SwiGLU** 激活函数。
 - **LLaMA-2**：  
   - 引入 **Grouped Query Attention (GQA)**，减少KV头的显存占用，但保留MHA的计算框架。
 
 ### **(3) Qwen（阿里云）**
+
 - **Qwen-7B/72B**：  
   - 基于标准MHA，但支持 **FlashAttention** 和 **长上下文扩展（32k tokens）**。
   - 可能采用 **稀疏注意力** 处理长序列。
 
 ### **(4) DeepSeek（深度求索）**
+
 - **DeepSeek-MoE**：  
   - 在MoE架构中仍使用MHA，但通过 **动态路由** 减少计算量。
   - 可能结合 **GQA** 或 **FlashAttention-2** 优化推理速度。
 
 ### **(5) 其他高效模型**
+
 - **Mistral**：  
   - 基于 **滑动窗口注意力（Sliding Window）**，但本质是MHA的局部受限版本。
 - **Gemini**（Google）：  
@@ -35,6 +41,7 @@
 ---
 
 ## **2. MHA的变体与优化技术**
+
 虽然MHA是基础结构，但实际实现中通常会结合以下优化：
 
 | 优化技术               | 作用                           | 是否保留MHA框架？ |
@@ -48,7 +55,9 @@
 ---
 
 ## **3. 代码示例：标准MHA vs. 优化MHA**
+
 ### **(1) 标准MHA（PyTorch实现）**
+
 ```python
 import torch
 import torch.nn as nn
@@ -116,6 +125,7 @@ class OptimizedMHA(nn.Module):
 ---
 
 ## **4. 总结**
+
 - **MHA仍然是主流**：几乎所有Transformer模型的基础注意力机制。
 - **优化方向**：  
   - **计算效率**：FlashAttention、稀疏注意力。  
@@ -126,21 +136,25 @@ class OptimizedMHA(nn.Module):
   - 长序列推理 → GQA + 稀疏注意力。  
   - 边缘设备 → 滑动窗口 + 量化。  
 
-# 多头注意力（MHA）计算与优化
+## 多头注意力（MHA）计算与优化
 
 ### **1. 标准多头注意力（MHA）的工作原理**
+
 #### **(1) 计算过程**
+
 - 对于输入序列 `X`（长度为 `N`），MHA 会为每个 token 生成 `Query (Q)`、`Key (K)`、`Value (V)`：
   - `Q`：当前 token 的“提问”，用于匹配其他 token。
   - `K`：其他 token 的“标识”，用于被 `Q` 匹配。
   - `V`：其他 token 的“实际内容”，用于加权聚合。
 
-# 注意力权重计算（伪代码表示数学公式）
+## 注意力权重计算（伪代码表示数学公式）
+
 Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) * V
 
   - 输出是 `V` 的加权和，权重由 `softmax(QK^T)` 决定。
 
 #### **(2) 全局性**
+
 - **每个 token 会与序列中所有 token 计算关系**（包括自身），因此复杂度为 `O(N²)`。
 - **优点**：捕捉长距离依赖（如段落首尾关系）。
 - **缺点**：长序列（如 `N=10k`）时计算开销极大。
@@ -148,6 +162,7 @@ Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) * V
 ---
 
 ### **2. 注意力优化的常见限制方法**
+
 为了降低计算成本，许多模型会 **限制 token 之间的关系范围**：
 
 | 方法                | 计算范围                     | 复杂度     | 适用场景               |
@@ -222,6 +237,7 @@ local_output = sliding_window_attention(Q, K, V, window_size)
 ---
 
 ### **5. 总结**
+
 - **标准 MHA**：计算所有 token 对的关系，适合短序列。
 - **优化注意力**：通过稀疏、局部、分组（GQA）等方法降低计算量，适合长序列。
 - **选择依据**：  
@@ -231,14 +247,16 @@ local_output = sliding_window_attention(Q, K, V, window_size)
 实际应用中，模型会结合多种技术（如 LLaMA-2 的 **GQA + FlashAttention**）平衡效果与效率。
 
 
+## 注意力如何传递
 
-# 注意力如何传递
 ---
 
 ### **1. 注意力计算后的处理流程**
+
 当某一层的多头注意力（MHA）计算完成后，会经过以下步骤传递到下一层：
 
 #### **(1) 注意力输出拼接与投影**
+
 - 每个注意力头的输出（维度 `d_head`）会拼接（concat）在一起，然后通过一个线性层（`W_o`）投影回 `d_model` 维度。
   \[
   \text{Output} = \text{Concat}(\text{head}_1, \text{head}_2, ..., \text{head}_h) \cdot W_o
@@ -246,24 +264,28 @@ local_output = sliding_window_attention(Q, K, V, window_size)
   - 其中 `h` 是注意力头的数量，`d_head = d_model / h`。
 
 #### **(2) 残差连接（Residual Connection）**
+
 - 注意力输出会与输入（即残差）相加，缓解梯度消失问题：
   \[
   \text{Output} = \text{Attention}(Q, K, V) + \text{Input}
   \]
 
 #### **(3) 层归一化（LayerNorm）**
+
 - 对残差后的结果进行层归一化：
   \[
   \text{Output} = \text{LayerNorm}(\text{Attention} + \text{Input})
   \]
 
 #### **(4) 前馈神经网络（FFN）**
+
 - 归一化后的输出会通过一个前馈网络（通常是两层MLP + 激活函数）：
   \[
   \text{FFN}(x) = \text{GeLU}(x W_1 + b_1) W_2 + b_2
   \]
 
 #### **(5) 再次残差连接与层归一化**
+
 - FFN输出再次与输入相加并归一化：
   \[
   \text{Output} = \text{LayerNorm}(\text{FFN}(x) + x)
@@ -315,6 +337,7 @@ class TransformerLayer(nn.Module):
 ---
 
 ### **3. 关键步骤图示**
+
 ```
 输入序列: [Token1, Token2, ..., TokenN]
     |
@@ -339,6 +362,7 @@ class TransformerLayer(nn.Module):
 ---
 
 ### **4. 参数传递细节**
+
 - **维度一致性**：每一层的输入和输出维度均为 `d_model`，确保层间兼容。
 - **梯度流动**：残差连接允许梯度直接回传，缓解深层网络训练难题。
 - **归一化位置**：LayerNorm **在残差之后**（Post-Norm），部分模型（如GPT）采用 **Pre-Norm**（先归一化再残差）。
@@ -346,6 +370,7 @@ class TransformerLayer(nn.Module):
 ---
 
 ### **5. 不同模型的变体**
+
 | 模型          | 残差位置   | 归一化顺序       | 注意力优化               |
 |---------------|------------|------------------|--------------------------|
 | **原始Transformer** | Post-Norm  | LayerNorm(残差后) | 标准MHA                  |
@@ -369,7 +394,9 @@ class TransformerLayer(nn.Module):
 ---
 
 ### **1. 获取注意力权重的步骤**
+
 #### **(1) 加载模型并启用注意力输出**
+
 Qwen（包括0.5B版本）基于Transformer架构，可以通过以下方式提取注意力权重：
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -663,6 +690,7 @@ for step in steps:
 - **原理**：利用`【】`、`“”`等符号或编号列表吸引模型注意力。
 
 #### **(2) 少样本示例（Few-shot Prompting）**
+
 - **方法**：在指令前添加示例，引导模型模仿注意力模式。
   ```python
   example = """
@@ -698,6 +726,7 @@ for step in steps:
   **适用场景**：已知指令关键词位置（如`keyword_pos = tokens.index("气候变化")`）。
 
 #### **(2) 激活注入（Activation Injection）**
+
 - **方法**：在特定层注入激活值，引导注意力方向（需Hook技术）。
   ```python
   from transformers import AutoModelForCausalLM
@@ -720,7 +749,9 @@ for step in steps:
 ---
 
 ### **3. 解码策略调整**
+
 #### **(1) 约束解码（Constrained Decoding）**
+
 - **方法**：限制生成时必须包含指令关键词。
   ```python
   from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -749,6 +780,7 @@ for step in steps:
   ```
 
 #### **(2) 温度调度（Temperature Scheduling）**
+
 - **方法**：在生成初期降低温度（Temperature），强化指令关注。
   ```python
   outputs = model.generate(
@@ -762,8 +794,11 @@ for step in steps:
 ---
 
 ### **4. 模型轻量级适配**
+
 #### **(1) 适配器（Adapter）插入**
+
 - **方法**：在原有模型中插入小型适配层，仅训练适配器参数。
+
   ```python
   from peft import LoraConfig, get_peft_model
   
@@ -779,7 +814,9 @@ for step in steps:
   **优点**：训练成本仅为全参数微调的1%~10%。
 
 #### **(2) 前缀调优（Prefix Tuning）**
+
 - **方法**：在输入前添加可训练的前缀token，引导注意力。
+
   ```python
   from peft import PrefixTuningConfig
   
@@ -793,7 +830,9 @@ for step in steps:
 ---
 
 ### **5. 外部验证与反馈循环**
+
 #### **(1) 实时反馈矫正**
+
 - **方法**：当检测到注意力不足时，动态重新生成。
   ```python
   def generate_with_feedback(instruction, max_retries=3):
@@ -807,6 +846,7 @@ for step in steps:
   ```
 
 #### **(2) 基于检索的增强（RAG）**
+
 - **方法**：从外部知识库检索相关内容，作为上下文注入。
   ```python
   from langchain.retrievers import BM25Retriever

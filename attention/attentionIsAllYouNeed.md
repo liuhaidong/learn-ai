@@ -1,4 +1,4 @@
-论文《Attention Is All You Need》的主要观点和理论如下：
+# 论文《Attention Is All You Need》的主要观点和理论
 
 ---
 
@@ -21,6 +21,7 @@
 ### 1. 模型架构：Encoder-Decoder 结构
 
 * **Encoder 和 Decoder 各由 6 层相同的子结构堆叠组成**。
+
 * 每层包含两个子层：**多头自注意力（Multi-Head Self-Attention）** 和 **前馈神经网络（Feed-Forward Network）**，每个子层使用残差连接（Residual Connection）和层归一化（Layer Normalization）。
 
 ### 2. Attention 机制
@@ -204,11 +205,13 @@ Input
 
 ---
 
-# **Transformer 中每个 token 的位置编码（Positional Encoding, PE）确实是通过你列出的两个公式计算得出的**。这两个公式分别对应每个维度（dimension）上的正弦和余弦编码：
+## Transformer 中每个 token 的位置编码（Positional Encoding, PE）
+
+确实是通过你列出的两个公式计算得出的。这两个公式分别对应每个维度（dimension）上的正弦和余弦编码：
 
 
 
-## ✅ 公式重写更清晰一点：
+## ✅ 公式
 
 给定：
 
@@ -296,7 +299,7 @@ $$
 
 ---
 
-## 🧠 推理中发挥的作用
+##  推理中发挥的作用
 
 * **区分顺序**：模型才能知道 “我 爱 你” 与 “你 爱 我” 是不一样的。
 * **为注意力计算提供顺序线索**：没有位置编码时，所有 token 是“无序包”。
