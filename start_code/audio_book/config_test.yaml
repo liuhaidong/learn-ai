@@ -1,0 +1,91 @@
+# Test Configuration (Simplified for quick testing)
+
+llm:
+  provider: "deepseek"
+  api_key: "${DEEPSEEK_API_KEY}"
+  base_url: "https://api.deepseek.com/v1"
+  model: "deepseek-chat"
+  temperature: 0.3
+  max_tokens: 500
+  retry_attempts: 3
+  retry_delay: 2
+
+pdf:
+  chapter_length: 2000  # Smaller for testing
+  min_chapter_length: 1000
+  max_chapter_length: 3000
+  preserve_formatting: false
+
+character_detection:
+  dialogue_patterns:
+    - '"(.*?)"'       # English quotes
+    - '「(.*?)」'      # Chinese quotes
+    - "'(.*?)'"        # English single quotes
+  min_dialogue_length: 5
+  max_dialogue_length: 500
+
+tts:
+  model: "tts_models/multilingual/multi-dataset/xtts_v2"
+  device: "cpu"
+  auto_download: true
+  
+  default_voice:
+    zh: "zh-CN-XiaoxiaoNeural"
+    en: "en-US-JennyNeural"
+  
+  voice_mapping:
+    adult_male:
+      zh: "zh-CN-YunxiNeural"
+      en: "en-US-GuyNeural"
+    adult_female:
+      zh: "zh-CN-XiaoxiaoNeural"
+      en: "en-US-JennyNeural"
+    young_adult_male:
+      zh: "zh-CN-YunxiNeural"
+      en: "en-US-GuyNeural"
+    young_adult_female:
+      zh: "zh-CN-XiaoxiaoNeural"
+      en: "en-US-JennyNeural"
+    elderly_male:
+      zh: "zh-CN-YunyangNeural"
+      en: "en-US-TonyNeural"
+    elderly_female:
+      zh: "zh-CN-XiaoyiNeural"
+      en: "en-US-AriaNeural"
+    child:
+      zh: "zh-CN-XiaoxiaoNeural"
+      en: "en-US-JennyNeural"
+    unknown:
+      zh: "zh-CN-XiaoxiaoNeural"
+      en: "en-US-JennyNeural"
+
+  voice_parameters:
+    child:
+      pitch: 1.2
+      rate: 1.1
+      volume: 1.0
+    young_adult:
+      pitch: 1.0
+      rate: 1.0
+      volume: 1.0
+    adult:
+      pitch: 1.0
+      rate: 1.0
+      volume: 1.0
+    elderly:
+      pitch: 0.9
+      rate: 0.95
+      volume: 1.1
+
+output:
+  format: "mp3"
+  sample_rate: 24000
+  bitrate: "128k"
+  chapter_padding: 0.5
+  temp_dir: "./temp"
+  cleanup_temp: true
+
+logging:
+  level: "INFO"
+  file: "audiobook.log"
+  console: true

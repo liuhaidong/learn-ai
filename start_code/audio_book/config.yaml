@@ -1,0 +1,98 @@
+# LLM API Configuration
+llm:
+  provider: "deepseek"
+  api_key: "${DEEPSEEK_API_KEY}"  # From environment variable
+  base_url: "https://api.deepseek.com/v1"  # DeepSeek API endpoint
+  model: "deepseek-chat"  # DeepSeek model
+  temperature: 0.3
+  max_tokens: 500
+  retry_attempts: 3
+  retry_delay: 2  # seconds
+
+# PDF Processing
+pdf:
+  chapter_length: 2500  # characters per chapter
+  min_chapter_length: 1500
+  max_chapter_length: 4000
+  preserve_formatting: false  # Simplify text for TTS
+
+# Character Detection
+character_detection:
+  dialogue_patterns:
+    - '"(.*?)"'       # English quotes
+    - '「(.*?)」'      # Chinese quotes
+    - "'(.*?)'"        # English single quotes
+    - '"(.*?)"'        # Alternative quotes
+  min_dialogue_length: 5  # minimum characters for dialogue
+  max_dialogue_length: 500  # maximum characters per dialogue
+
+# TTS Configuration
+tts:
+  model: "tts_models/multilingual/multi-dataset/xtts_v2"
+  device: "cpu"  # or "cuda" if GPU available
+  auto_download: true
+  
+  default_voice:
+    zh: "zh-CN-XiaoxiaoNeural"  # Female adult (default narrator)
+    en: "en-US-JennyNeural"        # Female adult (default narrator)
+  
+  # Voice mapping based on gender and age
+  voice_mapping:
+    adult_male:
+      zh: "zh-CN-YunxiNeural"
+      en: "en-US-GuyNeural"
+    adult_female:
+      zh: "zh-CN-XiaoxiaoNeural"
+      en: "en-US-JennyNeural"
+    young_adult_male:
+      zh: "zh-CN-YunxiNeural"
+      en: "en-US-GuyNeural"
+    young_adult_female:
+      zh: "zh-CN-XiaoxiaoNeural"
+      en: "en-US-JennyNeural"
+    elderly_male:
+      zh: "zh-CN-YunyangNeural"
+      en: "en-US-TonyNeural"
+    elderly_female:
+      zh: "zh-CN-XiaoyiNeural"
+      en: "en-US-AriaNeural"
+    child:
+      zh: "zh-CN-XiaoxiaoNeural"  # with pitch adjustment
+      en: "en-US-JennyNeural"    # with pitch adjustment
+    unknown:
+      zh: "zh-CN-XiaoxiaoNeural"
+      en: "en-US-JennyNeural"
+
+  # Voice parameter adjustments for different age groups
+  voice_parameters:
+    child:
+      pitch: 1.2  # Higher pitch for children
+      rate: 1.1
+      volume: 1.0
+    young_adult:
+      pitch: 1.0
+      rate: 1.0
+      volume: 1.0
+    adult:
+      pitch: 1.0
+      rate: 1.0
+      volume: 1.0
+    elderly:
+      pitch: 0.9  # Lower pitch for elderly
+      rate: 0.95  # Slightly slower
+      volume: 1.1  # Slightly louder
+
+# Output Settings
+output:
+  format: "mp3"
+  sample_rate: 24000
+  bitrate: "128k"
+  chapter_padding: 0.5  # seconds of silence between segments
+  temp_dir: "./temp"  # temporary files directory
+  cleanup_temp: true  # cleanup temp files after processing
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "audiobook.log"
+  console: true

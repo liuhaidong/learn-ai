@@ -1,0 +1,60 @@
+[2026-01-08 15:45:07] ================================================================================
+[2026-01-08 15:45:07] Simulation Started: 2026-01-08 15:45:07.746566
+[2026-01-08 15:45:07] ================================================================================
+[2026-01-08 15:45:08] 
+--- Step 0 at 07:00 ---
+[2026-01-08 15:45:08]   Yuriko_Yamamoto: thinking deeply (I'm feeling a bit tired)
+[2026-01-08 15:45:08]   Sam_Moore: stretching (I'm feeling a bit tired)
+[2026-01-08 15:45:08]   Tamara_Taylor: observing surroundings (I should check my schedule)
+[2026-01-08 15:45:13] 
+--- Step 10 at 07:01 ---
+[2026-01-08 15:45:13]   Yuriko_Yamamoto: thinking deeply (I'm feeling a bit tired)
+[2026-01-08 15:45:13]     Chat: How are you?
+[2026-01-08 15:45:13]   Sam_Moore: looking around (I wonder what's happening at the cafe)
+[2026-01-08 15:45:13]   Tamara_Taylor: observing surroundings (I'm looking forward to the party)
+[2026-01-08 15:45:18] 
+--- Step 20 at 07:03 ---
+[2026-01-08 15:45:18]   Yuriko_Yamamoto: checking phone (I'm looking forward to the party)
+[2026-01-08 15:45:18]     Chat: How are you?
+[2026-01-08 15:45:18]   Sam_Moore: walking around (I'm looking forward to the party)
+[2026-01-08 15:45:18]   Tamara_Taylor: standing still (I'm feeling a bit tired)
+[2026-01-08 15:45:23] 
+--- Step 30 at 07:05 ---
+[2026-01-08 15:45:23]   Yuriko_Yamamoto: thinking deeply (I need to get some work done)
+[2026-01-08 15:45:23]     Chat: How are you?
+[2026-01-08 15:45:23]   Sam_Moore: walking around (I wonder what's happening at the cafe)
+[2026-01-08 15:45:23]   Tamara_Taylor: observing surroundings (I'm looking forward to the party)
+[2026-01-08 15:45:27] 
+=== Final Statistics ===
+[2026-01-08 15:45:27] Total steps: 38
+[2026-01-08 15:45:27] Final time: 07:06
+[2026-01-08 15:45:27] 
+Yuriko_Yamamoto:
+[2026-01-08 15:45:27]   Position: (13, 9)
+[2026-01-08 15:45:27]   Total memories: 86
+[2026-01-08 15:45:27]   Recent memories:
+[2026-01-08 15:45:27]     - Moved to tile (13, 9) (event, importance: 1)
+[2026-01-08 15:45:27]     - Thought: I'm feeling a bit tired (thought, importance: 2)
+[2026-01-08 15:45:27]     - Moved to tile (13, 9) (event, importance: 1)
+[2026-01-08 15:45:27]     - Thought: I'm feeling a bit tired (thought, importance: 2)
+[2026-01-08 15:45:27]     - Moved to tile (13, 9) (event, importance: 1)
+[2026-01-08 15:45:27] 
+Sam_Moore:
+[2026-01-08 15:45:27]   Position: (9, 5)
+[2026-01-08 15:45:27]   Total memories: 85
+[2026-01-08 15:45:27]   Recent memories:
+[2026-01-08 15:45:27]     - Moved to tile (9, 5) (event, importance: 1)
+[2026-01-08 15:45:27]     - Thought: Maybe I should visit the park (thought, importance: 2)
+[2026-01-08 15:45:27]     - Moved to tile (9, 5) (event, importance: 1)
+[2026-01-08 15:45:27]     - Thought: I wonder what's happening at the cafe (thought, importance: 2)
+[2026-01-08 15:45:27]     - Moved to tile (9, 5) (event, importance: 1)
+[2026-01-08 15:45:27] 
+Tamara_Taylor:
+[2026-01-08 15:45:27]   Position: (17, 15)
+[2026-01-08 15:45:27]   Total memories: 76
+[2026-01-08 15:45:27]   Recent memories:
+[2026-01-08 15:45:27]     - Moved to tile (17, 16) (event, importance: 1)
+[2026-01-08 15:45:27]     - Thought: I wonder what's happening at the cafe (thought, importance: 2)
+[2026-01-08 15:45:27]     - Moved to tile (17, 15) (event, importance: 1)
+[2026-01-08 15:45:27]     - Thought: The weather seems nice today (thought, importance: 2)
+[2026-01-08 15:45:27]     - Moved to tile (17, 15) (event, importance: 1)

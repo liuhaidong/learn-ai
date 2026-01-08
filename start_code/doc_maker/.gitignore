@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Environment variables
+.env
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Output files
+output/
+*.docx
+*.xlsx
+
+# Logs
+logs/
+*.log
+
+# Test data
+data/prices/*.sqlite
+data/logs/*.jsonl
+
+# Temporary files
+tmp/
+temp/

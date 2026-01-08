@@ -1,0 +1,104 @@
+{
+  "chapters": [
+    {
+      "name": "视频监控系统",
+      "rules": [
+        {
+          "id": "CCTV-001",
+          "must_include": ["摄像机数量", "清晰度指标", "存储天数"],
+          "reference": "GB 50348-2018"
+        },
+        {
+          "id": "CCTV-002",
+          "must_include": ["网络结构图", "链路冗余"],
+          "reference": "公共安全行业标准 GA/T 367"
+        }
+      ]
+    },
+    {
+      "name": "入侵报警系统",
+      "rules": [
+        {
+          "id": "ALARM-001",
+          "must_include": ["报警探测器数量", "防区划分", "报警响应时间"],
+          "reference": "GB 50394-2007"
+        },
+        {
+          "id": "ALARM-002",
+          "must_include": ["防拆保护", "系统自检"],
+          "reference": "GB 12663-2001"
+        }
+      ]
+    },
+    {
+      "name": "门禁系统",
+      "rules": [
+        {
+          "id": "ACS-001",
+          "must_include": ["门禁点位数量", "开锁方式", "权限管理"],
+          "reference": "GB 50396-2007"
+        },
+        {
+          "id": "ACS-002",
+          "must_include": ["门禁控制器", "卡片类型", "通讯方式"],
+          "reference": "GA/T 394-2002"
+        }
+      ]
+    },
+    {
+      "name": "停车场系统",
+      "rules": [
+        {
+          "id": "PARK-001",
+          "must_include": ["车位数量", "出入口数量", "收费方式"],
+          "reference": "GB 50763-2012"
+        }
+      ]
+    },
+    {
+      "name": "综合布线",
+      "rules": [
+        {
+          "id": "CAB-001",
+          "must_include": ["信息点数量", "线缆类型", "带宽规格"],
+          "reference": "GB 50311-2016"
+        },
+        {
+          "id": "CAB-002",
+          "must_include": ["配线架", "跳线", "测试标准"],
+          "reference": "GB 50312-2016"
+        }
+      ]
+    },
+    {
+      "name": "网络系统",
+      "rules": [
+        {
+          "id": "NET-001",
+          "must_include": ["核心交换机", "接入交换机", "防火墙"],
+          "reference": "GB 50174-2017"
+        },
+        {
+          "id": "NET-002",
+          "must_include": ["网络拓扑", "VLAN划分", "IP地址规划"],
+          "reference": "GB/T 21671-2008"
+        }
+      ]
+    },
+    {
+      "name": "机房工程",
+      "rules": [
+        {
+          "id": "DC-001",
+          "must_include": ["UPS电源", "精密空调", "机柜数量"],
+          "reference": "GB 50174-2017"
+        },
+        {
+          "id": "DC-002",
+          "must_include": ["环境监控", "气体灭火", "防雷接地"],
+          "reference": "GB 50057-2010"
+        }
+      ]
+    }
+  ]
+}
