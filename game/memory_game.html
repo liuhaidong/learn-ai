@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记忆力训练游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            text-align: center;
+            color: #4b5563;
+            margin-bottom: 2rem;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .difficulty-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+        
+        .difficulty-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-easy {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-easy.inactive {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-medium {
+            background: #eab308;
+            color: white;
+        }
+        
+        .btn-medium.inactive {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .btn-hard {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-hard.inactive {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.25rem;
+            color: #6b7280;
+        }
+        
+        .stat-blue { color: #3b82f6; }
+        .stat-green { color: #10b981; }
+        .stat-purple { color: #a855f7; }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card {
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 1rem;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card:active {
+            transform: scale(0.95);
+        }
+        
+        .card-hidden {
+            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+            color: white;
+        }
+        
+        .card-flipped {
+            background: #dbeafe;
+            border: 4px solid #3b82f6;
+        }
+        
+        .card-matched {
+            background: #d1fae5;
+            border: 4px solid #10b981;
+        }
+        
+        .card:disabled {
+            cursor: not-allowed;
+        }
+        
+        .restart-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 1.25rem 3rem;
+            background: #3b82f6;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .restart-btn:active {
+            background: #2563eb;
+            transform: scale(0.95);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 25px rgba(0,0,0,0.2);
+        }
+        
+        .modal-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-text {
+            font-size: 1.5rem;
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-subtext {
+            font-size: 1.25rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-btn {
+            padding: 1.25rem 3rem;
+            background: #10b981;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .modal-btn:active {
+            background: #059669;
+            transform: scale(0.95);
+        }
+        
+        @media (max-width: 640px) {
+            h1 { font-size: 2rem; }
+            .subtitle { font-size: 1.25rem; }
+            .btn { padding: 0.75rem 1.5rem; font-size: 1rem; }
+            .stat-value { font-size: 1.5rem; }
+            .stat-label { font-size: 1rem; }
+            .card { font-size: 2rem; }
+            .game-board { gap: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>记忆力训练游戏</h1>
+        <p class="subtitle">翻开卡片,找到相同的图标配对</p>
+        
+        <div class="panel">
+            <h2 class="difficulty-title">选择难度:</h2>
+            <div class="difficulty-buttons">
+                <button class="btn btn-easy" onclick="setLevel(4)">简单 (8张)</button>
+                <button class="btn btn-medium inactive" onclick="setLevel(6)">中等 (12张)</button>
+                <button class="btn btn-hard inactive" onclick="setLevel(8)">困难 (16张)</button>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <div class="stats">
+                <div>
+                    <div class="stat-value stat-blue" id="moves">0</div>
+                    <div class="stat-label">步数</div>
+                </div>
+                <div>
+                    <div class="stat-value stat-green" id="matched">0</div>
+                    <div class="stat-label">已配对</div>
+                </div>
+                <div>
+                    <div class="stat-value stat-purple" id="total">4</div>
+                    <div class="stat-label">总对数</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-board" id="gameBoard"></div>
+        
+        <button class="restart-btn" onclick="initGame()">重新开始</button>
+    </div>
+    
+    <div class="modal" id="winModal">
+        <div class="modal-content">
+            <h2 class="modal-title">🎉 恭喜完成!</h2>
+            <p class="modal-text">您用了 <span id="finalMoves">0</span> 步完成游戏</p>
+            <p class="modal-subtext">记忆力真棒!</p>
+            <button class="modal-btn" onclick="closeModal()">再玩一局</button>
+        </div>
+    </div>
+    
+    <script>
+        const ICONS = ['😊', '❤️', '⭐', '☀️', '🌙', '☕', '🍎', '📚'];
+        
+        let level = 4;
+        let cards = [];
+        let flipped = [];
+        let matched = [];
+        let moves = 0;
+        
+        function setLevel(newLevel) {
+            level = newLevel;
+            
+            // Update button styles
+            document.querySelectorAll('.difficulty-buttons .btn').forEach(btn => {
+                btn.classList.add('inactive');
+            });
+            
+            if (newLevel === 4) {
+                document.querySelectorAll('.btn-easy').forEach(btn => btn.classList.remove('inactive'));
+            } else if (newLevel === 6) {
+                document.querySelectorAll('.btn-medium').forEach(btn => btn.classList.remove('inactive'));
+            } else {
+                document.querySelectorAll('.btn-hard').forEach(btn => btn.classList.remove('inactive'));
+            }
+            
+            initGame();
+        }
+        
+        function initGame() {
+            const selectedIcons = ICONS.slice(0, level);
+            cards = [...selectedIcons, ...selectedIcons]
+                .map((icon, idx) => ({ icon, id: idx }))
+                .sort(() => Math.random() - 0.5);
+            
+            flipped = [];
+            matched = [];
+            moves = 0;
+            
+            updateStats();
+            renderBoard();
+            closeModal();
+        }
+        
+        function renderBoard() {
+            const board = document.getElementById('gameBoard');
+            board.innerHTML = '';
+            
+            cards.forEach((card, idx) => {
+                const cardEl = document.createElement('button');
+                cardEl.className = 'card card-hidden';
+                cardEl.textContent = '?';
+                cardEl.onclick = () => handleCardClick(idx);
+                board.appendChild(cardEl);
+            });
+        }
+        
+        function handleCardClick(idx) {
+            if (flipped.length === 2 || flipped.includes(idx) || matched.includes(idx)) {
+                return;
+            }
+            
+            flipped.push(idx);
+            updateCard(idx, 'flipped');
+            
+            if (flipped.length === 2) {
+                moves++;
+                updateStats();
+                
+                const [first, second] = flipped;
+                
+                if (cards[first].icon === cards[second].icon) {
+                    setTimeout(() => {
+                        matched.push(first, second);
+                        updateCard(first, 'matched');
+                        updateCard(second, 'matched');
+                        flipped = [];
+                        updateStats();
+                        
+                        if (matched.length === cards.length) {
+                            showWinModal();
+                        }
+                    }, 600);
+                } else {
+                    setTimeout(() => {
+                        updateCard(first, 'hidden');
+                        updateCard(second, 'hidden');
+                        flipped = [];
+                    }, 1000);
+                }
+            }
+        }
+        
+        function updateCard(idx, state) {
+            const cardEl = document.getElementById('gameBoard').children[idx];
+            cardEl.className = 'card';
+            
+            if (state === 'hidden') {
+                cardEl.classList.add('card-hidden');
+                cardEl.textContent = '?';
+            } else if (state === 'flipped') {
+                cardEl.classList.add('card-flipped');
+                cardEl.textContent = cards[idx].icon;
+            } else if (state === 'matched') {
+                cardEl.classList.add('card-matched');
+                cardEl.textContent = cards[idx].icon;
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('moves').textContent = moves;
+            document.getElementById('matched').textContent = matched.length / 2;
+            document.getElementById('total').textContent = level;
+        }
+        
+        function showWinModal() {
+            document.getElementById('finalMoves').textContent = moves;
+            document.getElementById('winModal').classList.add('show');
+        }
+        
+        function closeModal() {
+            document.getElementById('winModal').classList.remove('show');
+            initGame();
+        }
+        
+        // Initialize game on load
+        initGame();
+    </script>
+</body>
+</html>
